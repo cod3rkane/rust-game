@@ -1,15 +1,29 @@
 extern crate glfw;
-use self::glfw::{Action, Context, Key};
-
 extern crate gl;
 
+use self::glfw::{Action, Context, Key};
 use std::sync::mpsc::Receiver;
+use specs::prelude::*;
+use crate::comp::{Velocity, Position};
+use crate::sys::*;
 
 // Window Settings
 const SCR_WIDTH: u32 = 800;
 const SCR_HEIGHT: u32 = 600;
 
 pub fn game() {
+  let mut world = World::new();
+  world.register::<Velocity>();
+  world.register::<Position>();
+
+  world.create_entity().with(Velocity::new(1.0)).with(Position::new(1.0)).build();
+  world.create_entity().with(Velocity::new(2.0)).with(Position::new(2.0)).build();
+  world.create_entity().with(Velocity::new(3.0)).with(Position::new(3.0)).build();
+
+  world.create_entity().with(Position::new(2.0)).build();
+
+  let mut dispatcher = DispatcherBuilder::new().with(Test, "sys_test", &[]).build();
+
   let mut glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
   glfw.window_hint(glfw::WindowHint::ContextVersion(3, 3));
   glfw.window_hint(glfw::WindowHint::OpenGlProfile(
@@ -37,6 +51,8 @@ pub fn game() {
     // events
     // -----
     process_events(&mut window, &events);
+    dispatcher.setup(&mut world);
+    dispatcher.dispatch(&mut world);
 
     // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
     // -------------------------------------------------------------------------------
