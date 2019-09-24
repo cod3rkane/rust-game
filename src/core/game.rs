@@ -4,7 +4,7 @@ extern crate gl;
 use self::glfw::{Action, Context, Key};
 use std::sync::mpsc::Receiver;
 use specs::prelude::*;
-use crate::comp::{Velocity, Position};
+use crate::comp::*;
 use crate::sys::*;
 
 // Window Settings
@@ -15,6 +15,7 @@ pub fn game() {
   let mut world = World::new();
   world.register::<Velocity>();
   world.register::<Position>();
+  world.register::<Renderable>();
 
   world.create_entity().with(Velocity::new(1.0)).with(Position::new(1.0)).build();
   world.create_entity().with(Velocity::new(2.0)).with(Position::new(2.0)).build();
@@ -22,7 +23,9 @@ pub fn game() {
 
   world.create_entity().with(Position::new(4.0)).build();
 
-  let mut pre_sys_dispatcher = DispatcherBuilder::new().with(Test, "sys_test", &[]).build();
+  world.create_entity().with(Renderable::new()).build();
+
+  let mut pre_sys_dispatcher = DispatcherBuilder::new().with(PreRender, "sys_pre_render", &[]).build();
   let mut loop_sys_dispatcher = DispatcherBuilder::new().with(Render, "sys_render", &[]).build();
 
   let mut glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
