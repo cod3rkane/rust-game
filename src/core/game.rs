@@ -56,6 +56,11 @@ pub fn game() {
 
     // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
     // -------------------------------------------------------------------------------
+    unsafe {
+      gl::ClearColor(1.0, 1.0, 1.0, 1.0);
+      gl::Clear(gl::COLOR_BUFFER_BIT);
+    }
+
     window.swap_buffers();
     glfw.poll_events();
   }
