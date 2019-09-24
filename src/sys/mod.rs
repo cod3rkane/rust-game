@@ -1,2 +1,5 @@
 mod render;
-use self::render::*;
+pub use self::render::*;
+
+mod test;
+pub use self::test::*;
