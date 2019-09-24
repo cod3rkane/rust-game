@@ -20,7 +20,7 @@ pub fn game() {
   world.create_entity().with(Velocity::new(2.0)).with(Position::new(2.0)).build();
   world.create_entity().with(Velocity::new(3.0)).with(Position::new(3.0)).build();
 
-  world.create_entity().with(Position::new(2.0)).build();
+  world.create_entity().with(Position::new(4.0)).build();
 
   let mut dispatcher = DispatcherBuilder::new().with(Test, "sys_test", &[]).build();
 
