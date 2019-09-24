@@ -9,7 +9,7 @@ impl<'a> System<'a> for Test {
   fn run(&mut self, (mut pos, vel): Self::SystemData) {
     for (pos, vel) in (&mut pos, &vel).join() {
       // pos.0 += vel.0;
-      println!("Here {}", pos.0);
+      println!("Test System {}", pos.0);
     }
   }
 }

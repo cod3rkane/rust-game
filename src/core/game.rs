@@ -22,7 +22,8 @@ pub fn game() {
 
   world.create_entity().with(Position::new(4.0)).build();
 
-  let mut dispatcher = DispatcherBuilder::new().with(Test, "sys_test", &[]).build();
+  let mut pre_sys_dispatcher = DispatcherBuilder::new().with(Test, "sys_test", &[]).build();
+  let mut loop_sys_dispatcher = DispatcherBuilder::new().with(Render, "sys_render", &[]).build();
 
   let mut glfw = glfw::init(glfw::FAIL_ON_ERRORS).unwrap();
   glfw.window_hint(glfw::WindowHint::ContextVersion(3, 3));
@@ -47,12 +48,15 @@ pub fn game() {
 
   gl::load_with(|symbol| window.get_proc_address(symbol) as *const _);
 
+  pre_sys_dispatcher.setup(&mut world);
+  pre_sys_dispatcher.dispatch(&mut world);
+
   while !window.should_close() {
     // events
     // -----
     process_events(&mut window, &events);
-    dispatcher.setup(&mut world);
-    dispatcher.dispatch(&mut world);
+    loop_sys_dispatcher.setup(&mut world);
+    loop_sys_dispatcher.dispatch(&mut world);
 
     // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
     // -------------------------------------------------------------------------------
