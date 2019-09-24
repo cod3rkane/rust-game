@@ -8,8 +8,8 @@ use crate::comp::{Velocity, Position};
 use crate::sys::*;
 
 // Window Settings
-const SCR_WIDTH: u32 = 800;
-const SCR_HEIGHT: u32 = 600;
+const SCR_WIDTH: u32 = 1280;
+const SCR_HEIGHT: u32 = 720;
 
 pub fn game() {
   let mut world = World::new();
